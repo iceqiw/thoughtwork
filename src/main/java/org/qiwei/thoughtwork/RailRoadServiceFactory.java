@@ -1,6 +1,9 @@
 package org.qiwei.thoughtwork;
 
 import org.qiwei.thoughtwork.domain.Route;
+import org.qiwei.thoughtwork.domain.StrategyParams;
+import org.qiwei.thoughtwork.domain.StrategyParamsByDis;
+import org.qiwei.thoughtwork.domain.StrategyParamsByStop;
 import org.qiwei.thoughtwork.service.TripCountByMaxDistanceService;
 import org.qiwei.thoughtwork.service.TripCountByStopService;
 import org.qiwei.thoughtwork.service.TripDistanceService;
@@ -35,10 +38,6 @@ public class RailRoadServiceFactory extends AbstractRailRoadServiceFactory {
         super(railRoadMapStr);
     }
 
-    public Map<Route, Integer> parseRoad(String road) {
-
-        return railRoadMap;
-    }
 
     /**
      * @param
@@ -49,7 +48,7 @@ public class RailRoadServiceFactory extends AbstractRailRoadServiceFactory {
      */
     @Override
     public TripCountByStopService applyTripCountByStopService() {
-        TripStrategyProgramming strategy = new TripCountByStopStrategyImpl(this.railRoadMap);
+        TripStrategyProgramming<StrategyParamsByStop> strategy = new TripCountByStopStrategyImpl(this.railRoadMap);
         return new TripCountByStopServiceImpl(strategy);
     }
 
@@ -75,7 +74,7 @@ public class RailRoadServiceFactory extends AbstractRailRoadServiceFactory {
      */
     @Override
     public TripShortestDistanceService applyTripShortestDistance() {
-        TripStrategyProgramming strategy = new TripShortestDistanceStrategyImpl(this.railRoadMap);
+        TripStrategyProgramming<StrategyParams> strategy = new TripShortestDistanceStrategyImpl(this.railRoadMap);
         return new TripShortestDistanceServiceImpl(strategy);
     }
 
@@ -89,7 +88,7 @@ public class RailRoadServiceFactory extends AbstractRailRoadServiceFactory {
      */
     @Override
     public TripCountByMaxDistanceService applyTripCountByMaxDistanceService() {
-        TripStrategyProgramming strategy = new TripCountByMaxDistanceStrategyImpl(this.railRoadMap);
+        TripStrategyProgramming<StrategyParamsByDis> strategy = new TripCountByMaxDistanceStrategyImpl(this.railRoadMap);
         return new TripCountByMaxDistanceServiceImpl(strategy);
     }
 

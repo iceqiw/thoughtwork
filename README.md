@@ -63,3 +63,37 @@ Application 主入口程序
  2.在${project_path}/target目录下（project_path 为项目对应路径）运行ThoughtWorksHomeTest-1.0-SNAPSHOT.jar包
 
 java -jar ThoughtWorksHomeTest-1.0-SNAPSHOT.jar 
+
+3.运行程序后出现：please input GraphFile path：
+
+     输入文件路径：datafilepath
+
+
+4.输出样例：
+
+please input graph file path：D:\workspace\java\thoughtwork\data.txt
+
+
+Graph:AB5,BC4,CD8,DC8,DE6,AD5,CE2,EB3,AE7
+
+Output:
+
+Output #1:9
+
+Output #2:5
+
+Output #3:13
+
+Output #4:22
+
+Output #5:NO SUCH ROUTE
+
+Output #6:2
+
+Output #7:3
+
+Output #8:9
+
+Output #9:9
+
+Output #10:7

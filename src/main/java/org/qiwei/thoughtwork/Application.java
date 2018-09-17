@@ -5,6 +5,7 @@ import org.qiwei.thoughtwork.service.TripCountByStopService;
 import org.qiwei.thoughtwork.service.TripDistanceService;
 import org.qiwei.thoughtwork.service.TripShortestDistanceService;
 
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -27,19 +28,24 @@ public class Application {
         System.out.println("8.The length of the shortest route (in terms of distance to travel) from A to C.");
         System.out.println("9.The length of the shortest route (in terms of distance to travel) from B to B.");
         System.out.println("10.The number of different routes from C to C with a distance of less than 30.  In the sample data, the trips are: CDC, CEBC, CEBCDC, CDCEBC, CDEBC, CEBCEBC, CEBCEBCEBC.");
-
+        System.out.println("-------------------------------------------------------------------------------");
         Scanner sc = new Scanner(System.in);
-        System.out.println("default graph：AB5,BC4,CD8,DC8,DE6,AD5,CE2,EB3,AE7");
-        System.out.print("Graph：");
+        System.out.print("please input graph file path：");
         /**
          * "AB5,BC4,CD8,DC8,DE6,AD5,CE2,EB3,AE7"
          */
-        String Graph = sc.nextLine();
-        if (Graph.equals("")) {
-            Graph = "AB5,BC4,CD8,DC8,DE6,AD5,CE2,EB3,AE7";
+        String graphFileName = sc.nextLine();
+
+        String graph = Application.readGraphFile(graphFileName);
+
+        if (graph.equals("")) {
+            System.out.println("no file found");
+            return;
         }
+
+        System.out.println("Graph:" + graph);
         try {
-            RailRoadServiceFactory railRoadServiceFactory = new RailRoadServiceFactory(Graph);
+            RailRoadServiceFactory railRoadServiceFactory = new RailRoadServiceFactory(graph);
 
 
             System.out.println("Output:");
@@ -86,5 +92,21 @@ public class Application {
             System.out.println("wrong railroad");
             System.out.println("quit service");
         }
+    }
+
+    public static String readGraphFile(String path) {
+        StringBuilder Graph = new StringBuilder();
+        String tempString;
+        File file = new File(path);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            while ((tempString = reader.readLine()) != null) {
+                Graph.append(tempString);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return Graph.toString();
     }
 }
