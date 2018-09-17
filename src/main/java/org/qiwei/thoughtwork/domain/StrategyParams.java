@@ -1,22 +1,36 @@
 package org.qiwei.thoughtwork.domain;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 /**
  * @author qiwei
- * @description StrategyParams
+ * @description StrategyParams 基础策略参数类
  * @date 2018/9/16 17:52
  */
 public class StrategyParams {
 
+    /**
+     * 起始站名称
+     */
     private String startStationName;
 
+    /**
+     * 终点站名称
+     */
     private String endStationName;
 
+    /**
+     * 当前站名称
+     */
     private String currentStationName;
+    /**
+     * 当前路途
+     */
     private Trip currentTrip;
+    /**
+     * 所有可选路途
+     */
     private Set<Trip> trips;
 
     public StrategyParams(String startStationName, String endStationName) {
@@ -70,10 +84,5 @@ public class StrategyParams {
     public void addTrip(Trip trip) {
         this.trips.add(trip);
     }
-
-    public boolean doCondition(LinkedList<Route> currentPathRoute, Route newRoute) {
-        return currentPathRoute.contains(newRoute);
-    }
-
 
 }

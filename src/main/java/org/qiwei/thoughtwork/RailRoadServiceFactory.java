@@ -21,9 +21,10 @@ import java.util.Map;
 /**
  * @author qiwei
  * @description RailRoadServiceFactory
+ * 工厂类，完成地图初始化，各种服务生成。
  * @date 2018/9/15 22:26
  */
-public class RailRoadServiceFactory extends AbstRailRoadServiceFactory {
+public class RailRoadServiceFactory extends AbstractRailRoadServiceFactory {
 
 
     public RailRoadServiceFactory(Map<Route, Integer> railRoadMap) {
@@ -41,7 +42,7 @@ public class RailRoadServiceFactory extends AbstRailRoadServiceFactory {
 
     /**
      * @param
-     * @return org.qiwei.thoughtwork.service.TripDistanceService
+     * @return org.qiwei.thoughtwork.service.TripCountByStopService
      * @description 获取旅途停靠站服务
      * @author qiwei
      * @date 17:43 2018/9/16

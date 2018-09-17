@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
 *@description  AbstractStrategy
-*  
+*  路线规划策略抽象类
 * @author   qiwei
 * @date     2018/9/16 20:50
 */

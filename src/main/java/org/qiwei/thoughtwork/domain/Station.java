@@ -2,13 +2,15 @@ package org.qiwei.thoughtwork.domain;
 
 
 /**
-*@description 
-*  
-* @author   qiwei
-* @date     2018/9/15 20:17
-*/
+ * @author qiwei
+ * @description 车站类
+ * @date 2018/9/15 20:17
+ */
 public class Station {
 
+    /**
+     * 站名称
+     */
     private String name;
 
 

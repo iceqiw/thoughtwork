@@ -2,11 +2,14 @@ package org.qiwei.thoughtwork.domain;
 
 /**
  * @author qiwei
- * @description StrategyParamsByDis
+ * @description StrategyParamsByDis 根据距离规划旅途策略参数
  * @date 2018/9/16 18:46
  */
 public class StrategyParamsByDis extends StrategyParams {
 
+    /**
+     * 距离限制
+     */
     private Integer disLimit;
 
     public StrategyParamsByDis(String startStationName, String endStationName) {
@@ -26,7 +29,4 @@ public class StrategyParamsByDis extends StrategyParams {
         this.disLimit = disLimit;
     }
 
-    public boolean doCondition(Integer distance) {
-        return distance.compareTo(disLimit) >= 0;
-    }
 }

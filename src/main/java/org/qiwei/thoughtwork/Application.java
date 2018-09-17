@@ -7,7 +7,8 @@ import org.qiwei.thoughtwork.service.TripShortestDistanceService;
 
 /**
 *@description  Application
-*  
+*
+ *  程序主入口
 * @author   qiwei
 * @date     2018/9/16 21:56
 */

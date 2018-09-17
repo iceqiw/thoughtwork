@@ -3,13 +3,22 @@ package org.qiwei.thoughtwork.domain;
 
 /**
  * @author qiwei
- * @description
+ * @description 路线类
  * @date 2018/9/15 20:10
  */
 public class Route {
 
+    /**
+     * 始发站
+     */
     private Station startStation;
+    /**
+     * 到达站
+     */
     private Station endStation;
+    /**
+     * 距离
+     */
     private Integer distance;
 
 

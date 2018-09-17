@@ -26,6 +26,9 @@ public class TripShortestDistanceServiceImpl  implements TripShortestDistanceSer
     @Override
     public Integer showShortestTrips(String startStationName, String endStationName) {
         Set<Trip> trips = tripShortestDistanceStrategy.getAllTrips(new StrategyParams(startStationName, endStationName));
+        /**
+         * 排序
+         */
         TreeSet<Trip> minTrip = new TreeSet<>(trips);
         return minTrip.first().getDistance();
     }

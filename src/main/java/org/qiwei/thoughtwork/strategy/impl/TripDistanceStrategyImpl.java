@@ -19,15 +19,15 @@ public class TripDistanceStrategyImpl extends AbstractStrategy implements TripDi
     }
 
     /**
-     * @description
+     * 根据站点继续旅行距离
      *
-     *
+     * @param stationNames 沿途站点
+     * @return java.lang.Integer 旅途距离
+     * @throws NoSuchRouteException 未找到路线异常
+     * @description 根据站点继续旅行距离
      * @author qiwei
      * @date 22:29 2018/9/16
-     * @param stationNames
-     * @return java.lang.Integer
      */
-
     @Override
     public Integer getDistance(String... stationNames) throws NoSuchRouteException {
         Integer distanceSum = 0;

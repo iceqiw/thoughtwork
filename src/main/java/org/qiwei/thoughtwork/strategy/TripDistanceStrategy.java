@@ -3,17 +3,25 @@ package org.qiwei.thoughtwork.strategy;
 import org.qiwei.thoughtwork.exception.NoSuchRouteException;
 
 /**
+ *
+ * 根据站点计算旅行距离策略
+ *
  * @author qiwei
- * @description TripDistanceStrategy 旅行路线距离计算策略接口
+ * @description TripDistanceStrategy
  * @date 2018/9/15 20:41
  */
 public interface TripDistanceStrategy {
+
+
     /**
-     * @param stationNames 沿途车站名称
-     * @return
-     * @description 获取旅行路线距离
+     * 根据站点计算旅行距离
+     *
+     * @param stationNames 沿途站点
+     * @return java.lang.Integer 旅途距离
+     * @throws NoSuchRouteException 未找到路线异常
+     * @description 根据站点继续旅行距离
      * @author qiwei
-     * @date 17:41 2018/9/16
+     * @date 22:29 2018/9/16
      */
     Integer getDistance(String... stationNames) throws NoSuchRouteException;
 }

@@ -3,11 +3,14 @@ package org.qiwei.thoughtwork.domain;
 
 /**
  * @author qiwei
- * @description StrategyParams
+ * @description StrategyParamsByStop 根据停靠站规划旅途参数
  * @date 2018/9/16 17:52
  */
 public class StrategyParamsByStop extends StrategyParams {
 
+    /**
+     * 停靠站数量
+     */
     private Integer stopNum;
 
     public StrategyParamsByStop(String startStationName, String endStationName) {

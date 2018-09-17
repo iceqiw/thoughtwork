@@ -9,10 +9,22 @@ import java.util.LinkedList;
  */
 public class Trip implements Comparable<Trip> {
 
+    /**
+     * 起始站名称
+     */
     private String startStationName;
+    /**
+     * 终点站名称
+     */
     private String endStationName;
+    /**
+     * 是否有同样路线
+     */
     private Boolean hasSameRoute;
 
+    /**
+     * 路途路线
+     */
     private LinkedList<Route> routes;
 
     public Trip(String startStationName, String endStationName) {
@@ -34,12 +46,54 @@ public class Trip implements Comparable<Trip> {
         return routes;
     }
 
+    /**
+     *获取路线距离
+     *
+     * @author qiwei
+     * @date 10:44 2018/9/17
+     * @param
+     * @return java.lang.Integer
+     */
     public Integer getDistance() {
         Integer distance = 0;
         for (Route route : routes) {
             distance += route.getDistance();
         }
         return distance;
+    }
+
+    /**
+    * 获取旅途路径
+    *
+    * @author qiwei
+    * @date 10:46 2018/9/17
+    * @param
+    * @return
+    */
+    public String getPath() {
+        StringBuilder path = new StringBuilder(this.startStationName);
+        for (Route route : routes) {
+            path.append(route.getEndStationName());
+        }
+        return path.toString();
+    }
+
+
+    /**
+     *根据新路线生成新路途
+     *
+     * @author qiwei
+     * @date 10:46 2018/9/17
+     * @param newRoute 新路线
+     * @return org.qiwei.thoughtwork.domain.Trip
+     */
+    public Trip genNewTrip(Route newRoute) {
+        LinkedList<Route> newRoutes = new LinkedList<>(routes);
+        newRoutes.add(newRoute);
+        if (routes.contains(newRoute)) {
+            return new Trip(startStationName, endStationName, newRoutes, true);
+        }
+        return new Trip(startStationName, endStationName, newRoutes, false);
     }
 
     public Boolean getHasSameRoute() {
@@ -74,13 +128,7 @@ public class Trip implements Comparable<Trip> {
         return routes.size();
     }
 
-    public String getPath() {
-        StringBuilder path = new StringBuilder(this.startStationName);
-        for (Route route : routes) {
-            path.append(route.getEndStationName());
-        }
-        return path.toString();
-    }
+
 
     @Override
     public String toString() {
@@ -104,12 +152,4 @@ public class Trip implements Comparable<Trip> {
         return this.getDistance().compareTo(o.getDistance());
     }
 
-    public Trip genNewTrip(Route newRoute) {
-        LinkedList<Route> newRoutes = new LinkedList<>(routes);
-        newRoutes.add(newRoute);
-        if (routes.contains(newRoute)) {
-            return new Trip(startStationName, endStationName, newRoutes, true);
-        }
-        return new Trip(startStationName, endStationName, newRoutes, false);
-    }
 }
