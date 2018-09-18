@@ -1,6 +1,6 @@
 package org.qiwei.thoughtwork.service.impl;
 
-import org.qiwei.thoughtwork.domain.StrategyParamsByDis;
+import org.qiwei.thoughtwork.domain.StrategyParamsByStop;
 import org.qiwei.thoughtwork.domain.Trip;
 import org.qiwei.thoughtwork.service.AbstractTripService;
 import org.qiwei.thoughtwork.service.TripService;
@@ -10,21 +10,20 @@ import java.util.Set;
 
 /**
  * @author qiwei
- * @description TripCountByMaxDistanceServiceImpl
- * @date 2018/9/16 18:29
+ * @description TripCountByStopServiceImpl
+ * @date 2018/9/16 18:08
  */
-public class TripCountByMaxDistanceServiceImpl extends AbstractTripService<StrategyParamsByDis> implements TripService<StrategyParamsByDis> {
+public class TripCountByMaxStopServiceImpl extends AbstractTripService<StrategyParamsByStop> implements TripService<StrategyParamsByStop> {
 
 
-    public TripCountByMaxDistanceServiceImpl(TripStrategy<StrategyParamsByDis> tripStrategy) {
+    public TripCountByMaxStopServiceImpl(TripStrategy<StrategyParamsByStop> tripStrategy) {
         super(tripStrategy);
     }
 
     @Override
-    public String doService(StrategyParamsByDis strategyParams) {
+    public String doService(StrategyParamsByStop strategyParams) {
         Set<Trip> trips = tripStrategy.getTrips(strategyParams);
         return String.valueOf(trips.size());
     }
 
-    
 }

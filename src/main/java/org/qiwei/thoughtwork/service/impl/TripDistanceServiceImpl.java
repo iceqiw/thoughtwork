@@ -1,31 +1,33 @@
 package org.qiwei.thoughtwork.service.impl;
 
+import org.qiwei.thoughtwork.domain.StrategyParamsByStop;
+import org.qiwei.thoughtwork.domain.Trip;
 import org.qiwei.thoughtwork.exception.NoSuchRouteException;
-import org.qiwei.thoughtwork.service.TripDistanceService;
-import org.qiwei.thoughtwork.strategy.TripDistanceStrategy;
+import org.qiwei.thoughtwork.service.AbstractTripService;
+import org.qiwei.thoughtwork.service.TripService;
+import org.qiwei.thoughtwork.strategy.TripStrategy;
+
+import java.util.Set;
 
 /**
  * @author qiwei
  * @description SimpleDistanceRailRoadService
  * @date 2018/9/15 23:02
  */
-public class TripDistanceServiceImpl implements TripDistanceService {
+public class TripDistanceServiceImpl extends AbstractTripService<StrategyParamsByStop> implements TripService<StrategyParamsByStop> {
 
-    private TripDistanceStrategy tripDistanceStrategy;
-
-    public TripDistanceServiceImpl(TripDistanceStrategy tripDistanceStrategy) {
-        this.tripDistanceStrategy = tripDistanceStrategy;
+    public TripDistanceServiceImpl(TripStrategy<StrategyParamsByStop> tripStrategy) {
+        super(tripStrategy);
     }
 
     @Override
-    public String showDistance(String... stations) {
-        String disStr;
-        try {
-            Integer dis = tripDistanceStrategy.getDistance(stations);
-            disStr = dis.toString();
-        } catch (NoSuchRouteException e) {
-            disStr = e.getMessage();
+    public String doService(StrategyParamsByStop strategyParams) {
+        Set<Trip> trips = tripStrategy.getTrips(strategyParams);
+        for (Trip trip : trips) {
+            if (trip.getPath().equals(strategyParams.getStationNames())) {
+                return trip.getDistance().toString();
+            }
         }
-        return disStr;
+        throw new NoSuchRouteException();
     }
 }

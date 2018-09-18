@@ -4,21 +4,14 @@ import org.qiwei.thoughtwork.domain.Route;
 import org.qiwei.thoughtwork.domain.StrategyParams;
 import org.qiwei.thoughtwork.domain.StrategyParamsByDis;
 import org.qiwei.thoughtwork.domain.StrategyParamsByStop;
-import org.qiwei.thoughtwork.service.TripCountByMaxDistanceService;
-import org.qiwei.thoughtwork.service.TripCountByStopService;
-import org.qiwei.thoughtwork.service.TripDistanceService;
-import org.qiwei.thoughtwork.service.TripShortestDistanceService;
-import org.qiwei.thoughtwork.service.impl.TripCountByMaxDistanceServiceImpl;
-import org.qiwei.thoughtwork.service.impl.TripCountByStopServiceImpl;
-import org.qiwei.thoughtwork.service.impl.TripDistanceServiceImpl;
-import org.qiwei.thoughtwork.service.impl.TripShortestDistanceServiceImpl;
-import org.qiwei.thoughtwork.strategy.TripDistanceStrategy;
-import org.qiwei.thoughtwork.strategy.TripStrategyProgramming;
+import org.qiwei.thoughtwork.service.TripService;
+import org.qiwei.thoughtwork.service.impl.*;
+import org.qiwei.thoughtwork.strategy.TripStrategy;
 import org.qiwei.thoughtwork.strategy.impl.TripCountByMaxDistanceStrategyImpl;
 import org.qiwei.thoughtwork.strategy.impl.TripCountByStopStrategyImpl;
-import org.qiwei.thoughtwork.strategy.impl.TripDistanceStrategyImpl;
 import org.qiwei.thoughtwork.strategy.impl.TripShortestDistanceStrategyImpl;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -27,70 +20,71 @@ import java.util.Map;
  * 工厂类，完成地图初始化，各种服务生成。
  * @date 2018/9/15 22:26
  */
-public class RailRoadServiceFactory extends AbstractRailRoadServiceFactory {
+public class RailRoadServiceFactory {
+
+
+    protected Map<Route, Integer> railRoadMap;
 
 
     public RailRoadServiceFactory(Map<Route, Integer> railRoadMap) {
-        super(railRoadMap);
+        this.railRoadMap = railRoadMap;
     }
 
     public RailRoadServiceFactory(String railRoadMapStr) {
-        super(railRoadMapStr);
-    }
-
-
-    /**
-     * @param
-     * @return org.qiwei.thoughtwork.service.TripCountByStopService
-     * @description 获取旅途停靠站服务
-     * @author qiwei
-     * @date 17:43 2018/9/16
-     */
-    @Override
-    public TripCountByStopService applyTripCountByStopService() {
-        TripStrategyProgramming<StrategyParamsByStop> strategy = new TripCountByStopStrategyImpl(this.railRoadMap);
-        return new TripCountByStopServiceImpl(strategy);
+        Map<Route, Integer> railRoadMap = new HashMap<>();
+        String splitChar = ",";
+        String[] items = railRoadMapStr.split(splitChar);
+        for (String item : items) {
+            String startStationName = Character.toString(item.charAt(0));
+            String endStationName = Character.toString(item.charAt(1));
+            Integer distance = Integer.parseInt(Character.toString(item.charAt(2)));
+            railRoadMap.put(new Route(startStationName, endStationName, distance), distance);
+        }
+        this.railRoadMap = railRoadMap;
     }
 
     /**
-     * @param
-     * @return org.qiwei.thoughtwork.service.TripDistanceService
-     * @description 获取旅途距离计算服务
+     * 向地图添加路径
+     *
+     * @param route 路线
+     * @param dis   距离
+     * @return void
      * @author qiwei
-     * @date 17:43 2018/9/16
+     * @date 10:39 2018/9/17
      */
-    @Override
-    public TripDistanceService applyTripDistanceService() {
-        TripDistanceStrategy strategy = new TripDistanceStrategyImpl(this.railRoadMap);
-        return new TripDistanceServiceImpl(strategy);
-    }
-
-    /**
-     * @param
-     * @return org.qiwei.thoughtwork.service.TripShortestDistanceService
-     * @description 获取最短路径服务
-     * @author qiwei
-     * @date 18:24 2018/9/16
-     */
-    @Override
-    public TripShortestDistanceService applyTripShortestDistance() {
-        TripStrategyProgramming<StrategyParams> strategy = new TripShortestDistanceStrategyImpl(this.railRoadMap);
-        return new TripShortestDistanceServiceImpl(strategy);
+    public void addRoute(Route route, Integer dis) {
+        railRoadMap.put(route, dis);
     }
 
 
-    /**
-     * @param
-     * @return org.qiwei.thoughtwork.service.TripCountByMaxDistanceService
-     * @description 获取最大距离现在旅途数量
-     * @author qiwei
-     * @date 18:25 2018/9/16
-     */
-    @Override
-    public TripCountByMaxDistanceService applyTripCountByMaxDistanceService() {
-        TripStrategyProgramming<StrategyParamsByDis> strategy = new TripCountByMaxDistanceStrategyImpl(this.railRoadMap);
-        return new TripCountByMaxDistanceServiceImpl(strategy);
-    }
+    public TripService applyTripService(Integer type) {
+        if (type == 0) {
+            TripStrategy<StrategyParamsByStop> strategy = new TripStrategy<>(new TripCountByStopStrategyImpl(), this.railRoadMap);
+            TripService<StrategyParamsByStop> service = new TripDistanceServiceImpl(strategy);
+            return service;
+        }
+        if (type == 1) {
+            TripStrategy<StrategyParamsByStop> strategy = new TripStrategy<>(new TripCountByStopStrategyImpl(), this.railRoadMap);
+            TripService<StrategyParamsByStop> service = new TripCountByMaxStopServiceImpl(strategy);
+            return service;
+        }
+        if (type == 2) {
+            TripStrategy<StrategyParamsByStop> strategy = new TripStrategy<>(new TripCountByStopStrategyImpl(), this.railRoadMap);
+            TripService<StrategyParamsByStop> service = new TripCountByStopServiceImpl(strategy);
+            return service;
+        }
+        if (type == 3) {
+            TripStrategy<StrategyParams> strategy = new TripStrategy<>(new TripShortestDistanceStrategyImpl(), this.railRoadMap);
+            TripService<StrategyParams> service = new TripShortestDistanceServiceImpl(strategy);
+            return service;
+        }
+        if (type == 4) {
+            TripStrategy<StrategyParamsByDis> strategy = new TripStrategy<>(new TripCountByMaxDistanceStrategyImpl(), this.railRoadMap);
+            TripService<StrategyParamsByDis> service = new TripCountByMaxDistanceServiceImpl(strategy);
+            return service;
+        }
 
+        return null;
+    }
 
 }

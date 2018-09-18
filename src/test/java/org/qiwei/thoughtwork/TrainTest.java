@@ -3,18 +3,17 @@ package org.qiwei.thoughtwork;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.qiwei.thoughtwork.domain.Route;
-import org.qiwei.thoughtwork.service.TripCountByMaxDistanceService;
-import org.qiwei.thoughtwork.service.TripCountByStopService;
-import org.qiwei.thoughtwork.service.TripDistanceService;
-import org.qiwei.thoughtwork.service.TripShortestDistanceService;
-
-import java.util.HashMap;
+import org.qiwei.thoughtwork.domain.StrategyParams;
+import org.qiwei.thoughtwork.domain.StrategyParamsByDis;
+import org.qiwei.thoughtwork.domain.StrategyParamsByStop;
+import org.qiwei.thoughtwork.exception.NoSuchRouteException;
+import org.qiwei.thoughtwork.service.TripService;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * 测试用例
+ *
  * @author qiwei
  * @description
  * @date 2018/9/14 23:06
@@ -26,7 +25,7 @@ public class TrainTest {
 
     @Before
     public void init() {
-        this.railRoadServiceFactory =new RailRoadServiceFactory("AB5,BC4,CD8,DC8,DE6,AD5,CE2,EB3,AE7");
+        this.railRoadServiceFactory = new RailRoadServiceFactory("AB5,BC4,CD8,DC8,DE6,AD5,CE2,EB3,AE7");
     }
 
 
@@ -40,8 +39,9 @@ public class TrainTest {
      */
     @Test
     public void test1() {
-        TripDistanceService service = railRoadServiceFactory.applyTripDistanceService();
-        String dis = service.showDistance("A", "B", "C");
+        TripService<StrategyParamsByStop> service = railRoadServiceFactory.applyTripService(0);
+        String[] stations = {"A", "B", "C"};
+        String dis = service.doService(new StrategyParamsByStop(stations));
         assertEquals("9", dis);
     }
 
@@ -55,8 +55,9 @@ public class TrainTest {
      */
     @Test
     public void test2() {
-        TripDistanceService service = railRoadServiceFactory.applyTripDistanceService();
-        String dis = service.showDistance("A", "D");
+        TripService<StrategyParamsByStop> service = railRoadServiceFactory.applyTripService(0);
+        String[] stations = {"A", "D"};
+        String dis = service.doService(new StrategyParamsByStop(stations));
         assertEquals("5", dis);
     }
 
@@ -70,8 +71,9 @@ public class TrainTest {
      */
     @Test
     public void test3() {
-        TripDistanceService service = railRoadServiceFactory.applyTripDistanceService();
-        String dis = service.showDistance("A", "D", "C");
+        TripService<StrategyParamsByStop> service = railRoadServiceFactory.applyTripService(0);
+        String[] stations = {"A", "D", "C"};
+        String dis = service.doService(new StrategyParamsByStop(stations));
         assertEquals("13", dis);
     }
 
@@ -85,8 +87,9 @@ public class TrainTest {
      */
     @Test
     public void test4() {
-        TripDistanceService service = railRoadServiceFactory.applyTripDistanceService();
-        String dis = service.showDistance("A", "E", "B", "C", "D");
+        TripService<StrategyParamsByStop> service = railRoadServiceFactory.applyTripService(0);
+        String[] stations = {"A", "E", "B", "C", "D"};
+        String dis = service.doService(new StrategyParamsByStop(stations));
         assertEquals("22", dis);
     }
 
@@ -100,8 +103,14 @@ public class TrainTest {
      */
     @Test
     public void test5() {
-        TripDistanceService service = railRoadServiceFactory.applyTripDistanceService();
-        String dis = service.showDistance("A", "E", "D");
+        TripService<StrategyParamsByStop> service = railRoadServiceFactory.applyTripService(0);
+        String[] stations = {"A", "E", "D"};
+        String dis;
+        try {
+            dis = service.doService(new StrategyParamsByStop(stations));
+        } catch (NoSuchRouteException e) {
+            dis = e.getMessage();
+        }
         assertEquals("NO SUCH ROUTE", dis);
     }
 
@@ -117,9 +126,9 @@ public class TrainTest {
      */
     @Test
     public void test6() {
-        TripCountByStopService service = railRoadServiceFactory.applyTripCountByStopService();
-        Integer count = service.showMaxStopTripsCount("C", "C", 3);
-        assertEquals("2", count.toString());
+        TripService<StrategyParamsByStop> service = railRoadServiceFactory.applyTripService(1);
+        String count = service.doService(new StrategyParamsByStop("C", "C", 3));
+        assertEquals("2", count);
     }
 
     /**
@@ -133,9 +142,9 @@ public class TrainTest {
      */
     @Test
     public void test7() {
-        TripCountByStopService service = railRoadServiceFactory.applyTripCountByStopService();
-        Integer count = service.showExactlyStopTripsCount("A", "C", 4);
-        assertEquals("3", count.toString());
+        TripService<StrategyParamsByStop> service = railRoadServiceFactory.applyTripService(2);
+        String count = service.doService(new StrategyParamsByStop("A", "C", 4));
+        assertEquals("3", count);
     }
 
 
@@ -149,9 +158,9 @@ public class TrainTest {
      */
     @Test
     public void test8() {
-        TripShortestDistanceService service = railRoadServiceFactory.applyTripShortestDistance();
-        Integer dis = service.showShortestTrips("A", "C");
-        assertEquals("9", dis.toString());
+        TripService<StrategyParams> service = railRoadServiceFactory.applyTripService(3);
+        String count = service.doService(new StrategyParams("A", "C"));
+        assertEquals("9", count);
     }
 
     /**
@@ -164,9 +173,9 @@ public class TrainTest {
      */
     @Test
     public void test9() {
-        TripShortestDistanceService service = railRoadServiceFactory.applyTripShortestDistance();
-        Integer dis = service.showShortestTrips("B", "B");
-        assertEquals("9", dis.toString());
+        TripService<StrategyParams> service = railRoadServiceFactory.applyTripService(3);
+        String count = service.doService(new StrategyParams("B", "B"));
+        assertEquals("9", count);
     }
 
     /**
@@ -180,8 +189,8 @@ public class TrainTest {
      */
     @Test
     public void test10() {
-        TripCountByMaxDistanceService service = railRoadServiceFactory.applyTripCountByMaxDistanceService();
-        Integer count = service.showTripsCountByMaxDistance("C", "C", 30);
-        assertEquals("7", count.toString());
+        TripService<StrategyParamsByDis> service = railRoadServiceFactory.applyTripService(4);
+        String count = service.doService(new StrategyParamsByDis("C", "C", 30));
+        assertEquals("7", count);
     }
 }

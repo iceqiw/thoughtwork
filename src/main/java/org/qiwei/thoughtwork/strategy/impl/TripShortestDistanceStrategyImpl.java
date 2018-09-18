@@ -1,11 +1,8 @@
 package org.qiwei.thoughtwork.strategy.impl;
 
-import org.qiwei.thoughtwork.domain.Route;
 import org.qiwei.thoughtwork.domain.StrategyParams;
 import org.qiwei.thoughtwork.domain.Trip;
-import org.qiwei.thoughtwork.strategy.BaseStrategy;
-
-import java.util.Map;
+import org.qiwei.thoughtwork.strategy.TripStrategyCondition;
 
 /**
  * 获取最短旅途策略实现
@@ -14,11 +11,7 @@ import java.util.Map;
  * @description TripShortestDistanceStrategyImpl
  * @date 2018/9/16 18:27
  */
-public class TripShortestDistanceStrategyImpl extends BaseStrategy<StrategyParams> {
-
-    public TripShortestDistanceStrategyImpl(Map<Route, Integer> railRoadMap) {
-        super(railRoadMap);
-    }
+public class TripShortestDistanceStrategyImpl implements TripStrategyCondition<StrategyParams> {
 
     /**
      * 最短旅途条件判断
@@ -31,7 +24,7 @@ public class TripShortestDistanceStrategyImpl extends BaseStrategy<StrategyParam
      * @date 22:28 2018/9/16
      */
     @Override
-    protected boolean doCondition(StrategyParams strategyParams, Trip newTrip) {
+    public boolean doCondition(StrategyParams strategyParams, Trip newTrip) {
         return !newTrip.getHasSameRoute();
     }
 

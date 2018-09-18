@@ -13,13 +13,25 @@ public class StrategyParamsByStop extends StrategyParams {
      */
     private Integer stopNum;
 
-    public StrategyParamsByStop(String startStationName, String endStationName) {
-        super(startStationName, endStationName);
-    }
+    /**
+     * 沿途车站名称
+     */
+    private String stationNames;
+
 
     public StrategyParamsByStop(String startStationName, String endStationName, Integer stopNum) {
         super(startStationName, endStationName);
         this.stopNum = stopNum;
+    }
+
+    public StrategyParamsByStop(String[] stationNames) {
+        super(stationNames[0], stationNames[stationNames.length - 1]);
+        StringBuilder stationNamesStr = new StringBuilder();
+        for (String stationName : stationNames) {
+            stationNamesStr.append(stationName);
+        }
+        this.stationNames = stationNamesStr.toString();
+        this.stopNum = stationNames.length;
     }
 
     public Integer getStopNum() {
@@ -30,7 +42,11 @@ public class StrategyParamsByStop extends StrategyParams {
         this.stopNum = stopNum;
     }
 
-    public boolean doCondition(Integer stops) {
-        return stops.compareTo(stopNum) <= 0;
+    public String getStationNames() {
+        return stationNames;
+    }
+
+    public void setStationNames(String stationNames) {
+        this.stationNames = stationNames;
     }
 }

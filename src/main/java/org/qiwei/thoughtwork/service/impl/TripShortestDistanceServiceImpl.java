@@ -2,8 +2,9 @@ package org.qiwei.thoughtwork.service.impl;
 
 import org.qiwei.thoughtwork.domain.StrategyParams;
 import org.qiwei.thoughtwork.domain.Trip;
-import org.qiwei.thoughtwork.service.TripShortestDistanceService;
-import org.qiwei.thoughtwork.strategy.TripStrategyProgramming;
+import org.qiwei.thoughtwork.service.AbstractTripService;
+import org.qiwei.thoughtwork.service.TripService;
+import org.qiwei.thoughtwork.strategy.TripStrategy;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -13,23 +14,20 @@ import java.util.TreeSet;
  * @description TripShortestDistanceServiceImpl
  * @date 2018/9/16 18:26
  */
-public class TripShortestDistanceServiceImpl  implements TripShortestDistanceService {
+public class TripShortestDistanceServiceImpl extends AbstractTripService<StrategyParams> implements TripService<StrategyParams> {
 
 
-    private TripStrategyProgramming<StrategyParams> tripShortestDistanceStrategy;
-
-
-    public TripShortestDistanceServiceImpl(TripStrategyProgramming<StrategyParams> tripShortestDistanceStrategy) {
-        this.tripShortestDistanceStrategy = tripShortestDistanceStrategy;
+    public TripShortestDistanceServiceImpl(TripStrategy<StrategyParams> tripStrategy) {
+        super(tripStrategy);
     }
 
     @Override
-    public Integer showShortestTrips(String startStationName, String endStationName) {
-        Set<Trip> trips = tripShortestDistanceStrategy.getAllTrips(new StrategyParams(startStationName, endStationName));
+    public String doService(StrategyParams strategyParams) {
+        Set<Trip> trips = tripStrategy.getTrips(strategyParams);
         /**
          * 排序
          */
         TreeSet<Trip> minTrip = new TreeSet<>(trips);
-        return minTrip.first().getDistance();
+        return String.valueOf(minTrip.first().getDistance());
     }
 }

@@ -1,9 +1,7 @@
 package org.qiwei.thoughtwork;
 
-import org.qiwei.thoughtwork.service.TripCountByMaxDistanceService;
-import org.qiwei.thoughtwork.service.TripCountByStopService;
-import org.qiwei.thoughtwork.service.TripDistanceService;
-import org.qiwei.thoughtwork.service.TripShortestDistanceService;
+import org.qiwei.thoughtwork.domain.StrategyParamsByStop;
+import org.qiwei.thoughtwork.service.TripService;
 
 import java.io.*;
 import java.util.Scanner;
@@ -49,45 +47,11 @@ public class Application {
 
 
             System.out.println("Output:");
-            TripDistanceService service = railRoadServiceFactory.applyTripDistanceService();
 
-            String output1 = service.showDistance("A", "B", "C");
-            System.out.println("Output #1:" + output1);
+            TripService<StrategyParamsByStop> service = railRoadServiceFactory.applyTripService(0);
+            String[] stations = {"A", "B", "C"};
+            service.doService(new StrategyParamsByStop(stations));
 
-
-            String output2 = service.showDistance("A", "D");
-            System.out.println("Output #2:" + output2);
-
-
-            String output3 = service.showDistance("A", "D", "C");
-            System.out.println("Output #3:" + output3);
-
-
-            String output4 = service.showDistance("A", "E", "B", "C", "D");
-            System.out.println("Output #4:" + output4);
-
-
-            String output5 = service.showDistance("A", "E", "D");
-            System.out.println("Output #5:" + output5);
-
-            TripCountByStopService tripCountByStopService = railRoadServiceFactory.applyTripCountByStopService();
-            Integer output6 = tripCountByStopService.showMaxStopTripsCount("C", "C", 3);
-            System.out.println("Output #6:" + output6);
-
-
-            Integer output7 = tripCountByStopService.showExactlyStopTripsCount("A", "C", 4);
-            System.out.println("Output #7:" + output7);
-
-            TripShortestDistanceService tripShortestDistanceService = railRoadServiceFactory.applyTripShortestDistance();
-            Integer output8 = tripShortestDistanceService.showShortestTrips("A", "C");
-            System.out.println("Output #8:" + output8);
-
-            Integer output9 = tripShortestDistanceService.showShortestTrips("B", "B");
-            System.out.println("Output #9:" + output9);
-
-            TripCountByMaxDistanceService tripCountByMaxDistanceService = railRoadServiceFactory.applyTripCountByMaxDistanceService();
-            Integer output10 = tripCountByMaxDistanceService.showTripsCountByMaxDistance("C", "C", 30);
-            System.out.println("Output #10:" + output10);
         } catch (Exception e) {
             System.out.println("wrong railroad");
             System.out.println("quit service");
